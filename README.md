@@ -49,11 +49,11 @@ class Account < ActiveAdminResource::Base
   self.site = "http://localhost/signed_api/"
 
   def self.agent_id
-    "***REMOVED***"
+    #Return id
   end
 
   def self.secret
-    "***REMOVED***=="
+    #Return secret
   end
 
   schema do
