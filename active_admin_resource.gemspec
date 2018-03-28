@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'active_admin_resource'
-  s.version     = '0.1.1'
+  s.version     = '0.1.2'
   s.date        = '2018-03-23'
   s.summary     = "ActiveResource for ActiveAdmin"
   s.description = "An adapter for using ActiveResource with ActiveAdmin"
