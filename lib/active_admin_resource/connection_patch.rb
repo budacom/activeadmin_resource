@@ -27,5 +27,3 @@ module ConnectionExtensions
     raise SSLError.new(e.message)
   end
 end
-
-ActiveResource::Connection.prepend(ConnectionExtensions)
