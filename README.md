@@ -69,24 +69,32 @@ When registering an ActiveAdminResource model with ActiveAdmin some additional c
 * Batch actions are not supported, so they should be disabled.
 * Although filters are not currently supported, one filter must be declared so this model works with ActiveAdmin.
 * The *find_collection* method of *controller* must be overriden and return a paginated array as a result.
+* Pagination is supported by providing pagination info in the server response. The currently supported pagination format expect a *meta* field in the response with a dictionary that has the following fields describing the pagination: *total_pages*, *total_count* and *current_page*.
+When a response is requested, the pagination info is stored in *Model.format.pagination_info* and can be used to paginate the info accordingly.
 
-The following example shows an ActiveAdminResource model being registered for ActiveAdmin:
+
+The following example shows an ActiveAdminResource model being registered for ActiveAdmin and using the pagination schema explained before. 
 
 ```ruby
-ActiveAdmin.register Market do
-  actions :index, :show
-
+  
+ActiveAdmin.register Account do
   config.batch_actions = false
 
   # Filters are not working but one filter has to be declared for the admin to work
-  filter :name, as: :string, label: "Name"
+  filter :names, as: :string, label: "Names"
 
   controller do
     def find_collection
+      default_per_page = 50
       @search = OpenStruct.new(params[:q] || {})
-      result = Market.find(:all)
-      # ToDo: Paginate
-      Kaminari.paginate_array(result, limit: result.count, offset: 0, total_count: result.count)
+      result = Account.find(:all, params: {
+        page: params.fetch(:page, 1),
+        per: params.fetch(:per_page, default_per_page),
+        q: params[:q] || {}
+      })
+      pagination_info = Account.format.pagination_info
+      offset = (pagination_info["current_page"] - 1) * per_page
+      Kaminari.paginate_array(result, limit: result.count, offset: offset, total_count: pagination_info["total_count"])
     end
   end
 end
