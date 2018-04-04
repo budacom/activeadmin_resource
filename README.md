@@ -86,10 +86,11 @@ ActiveAdmin.register Account do
   controller do
     def find_collection
       default_per_page = 50
+      per_page = params.fetch(:per_page, default_per_page)
       @search = OpenStruct.new(params[:q] || {})
       result = Account.find(:all, params: {
         page: params.fetch(:page, 1),
-        per: params.fetch(:per_page, default_per_page),
+        per: per_page,
         q: params[:q] || {}
       })
       pagination_info = Account.format.pagination_info
