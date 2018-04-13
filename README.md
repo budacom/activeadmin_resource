@@ -89,6 +89,7 @@ ActiveAdmin.register Account do
       per_page = params.fetch(:per_page, default_per_page)
       @search = OpenStruct.new(params[:q] || {})
       result = Account.find(:all, params: {
+        order: params.fetch(:order, nil),
         page: params.fetch(:page, 1),
         per: per_page,
         q: params[:q] || {}
