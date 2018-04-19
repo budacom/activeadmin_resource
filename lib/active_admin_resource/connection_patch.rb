@@ -1,3 +1,5 @@
+require 'authograph'
+
 module ConnectionExtensions
   def set_secret(secret)
     @secret = secret
