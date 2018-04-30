@@ -80,19 +80,21 @@ The following example shows an ActiveAdminResource model being registered for Ac
 ActiveAdmin.register Account do
   config.batch_actions = false
 
-  # Filters are not working but one filter has to be declared for the admin to work
   filter :names, as: :string, label: "Names"
+  filter :surnames, as: :string, label: "Surnames"
 
   controller do
     def find_collection
-      default_per_page = 50
+      default_per_page = 20
       per_page = params.fetch(:per_page, default_per_page)
-      @search = OpenStruct.new(params[:q] || {})
+      query_params = params.fetch(:q, nil)
+      search_params = query_params.nil? ? {} : query_params.permit!.to_h
+      @search = OpenStruct.new(search_params.merge(conditions: []))
       result = Account.find(:all, params: {
         order: params.fetch(:order, nil),
         page: params.fetch(:page, 1),
         per: per_page,
-        q: params[:q] || {}
+        search: search_params
       })
       pagination_info = Account.format.pagination_info
       offset = (pagination_info["current_page"] - 1) * per_page
@@ -108,7 +110,5 @@ end
 
 As explained before, there are several limitations and poorly tested cases in the current version:
 
-* Filters are not supported
-* Search is not supported
 * Batch actions are not supported
 * POST, PUT and DELETE actions are not tested well and may have issues
