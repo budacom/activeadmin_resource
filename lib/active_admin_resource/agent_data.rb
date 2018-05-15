@@ -4,7 +4,7 @@ module ActiveAdminResource
   class AgentData < Base
     self.include_root_in_json = true
 
-    def self.element_path(id, prefix_options = {}, query_options = nil)
+    def self.element_path(_id, prefix_options = {}, query_options = nil)
       check_prefix_options(prefix_options)
 
       prefix_options, query_options = split_options(prefix_options) if query_options.nil?
