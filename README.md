@@ -63,11 +63,84 @@ class Account < ActiveAdminResource::Base
 end
 
 ```
+
+ActiveResource has partial support for relations between models. You can specify `has_one` and `has_many`relations just like its is done in ActiveRecord:
+
+```ruby
+class Account < ActiveAdminResource::Base
+  self.site = "http://localhost/signed_api/"
+
+  has_one :agent_data
+  has_many :withdrawals
+
+  def self.agent_id
+    #Return id
+  end
+
+  def self.secret
+    #Return secret
+  end
+
+  schema do
+    attribute 'id', :integer
+    attribute 'name', :string
+  end
+end
+
+```
+
+The difference in how relations are handled is that for the subelement of a model (in this example `AgentData`) the url must include the parent
+url with a symbol indicating the id of the parent record (in this example `:account_id`).
+
+```ruby
+class AgentData < ActiveAdminResource::AgentDataBase
+  self.site = "http://localhost/signed_api/accounts/:account_id"
+
+  def self.agent_id
+    #Return id
+  end
+
+  def self.secret
+    #Return secret
+  end
+
+  schema do
+    attribute 'a', :string
+  end
+end
+```
+
+When accessing the subelement and trying to perform an action, this extra symbol must be included as a parameter to complete the url:
+
+```ruby
+Account.find(4).agent_data.update_attributes(a: "asdf", account_id: 4)
+```
+
+### ActiveAdminResource::AgentDataBase
+
+An additional base class called `AgentDataBase` is provided to model the special case of an `AgentData` object: 
+
+```ruby
+class AgentData < ActiveAdminResource::AgentDataBase
+  self.site = "http://localhost/signed_api/"
+
+  def self.agent_id
+    #Return id
+  end
+
+  def self.secret
+    #Return secret
+  end
+
+  schema do
+    attribute 'a', :string
+  end
+end
+```
+
 When registering an ActiveAdminResource model with ActiveAdmin some additional considerations must be taken:
 
-
 * Batch actions are not supported, so they should be disabled.
-* Although filters are not currently supported, one filter must be declared so this model works with ActiveAdmin.
 * The *find_collection* method of *controller* must be overriden and return a paginated array as a result.
 * Pagination is supported by providing pagination info in the server response. The currently supported pagination format expect a *meta* field in the response with a dictionary that has the following fields describing the pagination: *total_pages*, *total_count* and *current_page*.
 When a response is requested, the pagination info is stored in *Model.format.pagination_info* and can be used to paginate the info accordingly.
