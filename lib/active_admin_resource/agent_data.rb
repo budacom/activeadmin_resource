@@ -1,7 +1,5 @@
-require 'active_resource'
-
 module ActiveAdminResource
-  class AgentData < Base
+  class AgentDataBase < Base
     self.include_root_in_json = true
 
     def self.element_path(_id, prefix_options = {}, query_options = nil)
