@@ -1,6 +1,6 @@
 module FormtasticAddonsExtensions
   def seems_searchable?
-    return false
+    false
   end
 
   def klass
