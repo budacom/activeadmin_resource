@@ -1,7 +1,13 @@
 require 'active_resource'
+require 'active_admin_resource/associations'
+require 'active_admin_resource/gem_adaptors'
 
 module ActiveAdminResource
   class Base < ActiveResource::Base
+    extend ActiveAdminResource::Associations
+    extend ActiveAdminResource::GemAdaptors::EnumerizeAdaptor
+    extend ActiveAdminResource::GemAdaptors::RailsMoneyAdaptor
+
     class JsonFormatter
       include ActiveResource::Formats::JsonFormat
 
@@ -36,12 +42,30 @@ module ActiveAdminResource
     cattr_accessor :static_headers
     self.static_headers = headers
 
+    def self.inherited(model)
+      model.site = ENV['RESOURCES_API_URL'] if ENV.has_key?('RESOURCES_API_URL')
+      super
+    end
+
     def self.agent_id
-      nil
+      ENV['RESOURCES_API_AGENT_ID']
     end
 
     def self.secret
-      nil
+      ENV['RESOURCES_API_AGENT_SECRET']
+    end
+
+    def self.scope(name, body)
+      singleton_class.send(:define_method, name, &body)
+      # TODO: fix that a 2nd scope defined with same name in another model will override the 1st one,
+      # as all model's collections inherit from ActiveResource::Collection
+      ActiveResource::Collection.send(:define_method, name, &body)
+    end
+
+    def self.human_attribute_name(attr, _options = {})
+      I18n.t("activeresource.attributes.#{name.downcase}.#{attr}",
+        default: I18n.t("activerecord.attributes.#{name.downcase}.#{attr}",
+          default: attr.to_s.titleize))
     end
 
     def self.headers
