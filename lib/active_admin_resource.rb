@@ -1,3 +1,5 @@
 require 'active_admin_resource/base'
+require 'active_admin_resource/associations'
+require 'active_admin_resource/gem_adaptors'
 require 'active_admin_resource/agent_data_base'
 require 'active_admin_resource/railtie'
