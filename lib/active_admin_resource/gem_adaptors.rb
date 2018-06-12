@@ -1,14 +1,17 @@
 require 'active_resource'
+require 'formtastic'
+require 'action_view'
+require 'enumerize'
 
 module ActiveAdminResource
   module GemAdaptors
     module EnumerizeAdaptor
       # Enumerize support
-      # Model anyway must declare "extend Enumerize", just like an ActiveRecord model would
       def enumerize(name, options = {})
         # Getter
         define_method name do
           enumerize_attr = self.class.send(name)
+          name ||= options[:default]
           Enumerize::Value.new(enumerize_attr, attributes[name.to_sym])
         end
         # Setter
@@ -23,7 +26,7 @@ module ActiveAdminResource
       end
     end
 
-    module RailsMoneyAdaptor
+    module MoneyAdaptor
       def monetize(*fields)
         options = fields.extract_options!
         fields.each { |field| monetize_field(field, options) }
@@ -37,9 +40,15 @@ module ActiveAdminResource
         end
         # Setter
         define_method "#{field}=" do |new_amount|
-          amount = new_amount.amount
-          currency = new_amount.currency
-          attributes[:amount] = [amount, currency].map(&:to_s)
+          field = field.to_sym
+          if new_amount.is_a?(Money)
+            amount = new_amount.amount
+            currency = new_amount.currency
+          elsif new_amount.is_a?(Numeric)
+            amount = new_amount
+            currency = attributes[field].try(:last) || MoneyRails.default_currency.try(:iso_code) || 'USD'
+          end
+          attributes[field] = [amount, currency].map(&:to_s)
         end
       end
     end

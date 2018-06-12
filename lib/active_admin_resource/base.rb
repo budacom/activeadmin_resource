@@ -5,8 +5,9 @@ require 'active_admin_resource/gem_adaptors'
 module ActiveAdminResource
   class Base < ActiveResource::Base
     extend ActiveAdminResource::Associations
+    extend Enumerize if defined? Enumerize
     extend ActiveAdminResource::GemAdaptors::EnumerizeAdaptor
-    extend ActiveAdminResource::GemAdaptors::RailsMoneyAdaptor
+    extend ActiveAdminResource::GemAdaptors::MoneyAdaptor
 
     class JsonFormatter
       include ActiveResource::Formats::JsonFormat
