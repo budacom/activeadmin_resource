@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'money-rails', '~> 1.5'
   s.add_dependency 'monetize', '~> 1.3.0'
   s.add_dependency 'money', '~> 6.6'
-  s.add_dependency 'rspec'
   s.add_dependency 'formtastic'
   s.add_development_dependency 'pry'
+  s.add_development_dependency 'rspec'
 end
