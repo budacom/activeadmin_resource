@@ -27,24 +27,6 @@ module ActiveAdminResource
       end
     end
 
-    def has_one(model_name)
-      klass = Object.const_get model_name.to_s.classify
-      # Getter
-      define_method model_name do
-        var = instance_variable_get("@#{model_name}")
-        if !var.nil?
-          var
-        else
-          foreign_key = "#{model_name.name.downcase}_id"
-          instance_variable_set("@#{model_name}", klass.where(foreign_key => id).first)
-        end
-      end
-      # Setter
-      define_method "#{model_name}=" do |value|
-        instance_variable_set("@#{model_name}", value)
-      end
-    end
-
     Enumerable.send(:define_method, 'and_preload') do |model_to_load|
       model_to_load = model_to_load.to_s.singularize
       klass_to_load = Object.const_get model_to_load.classify
