@@ -9,7 +9,6 @@ module ConnectionExtensions
     result = ActiveSupport::Notifications.instrument("request.active_resource") do |payload|
       payload[:method]      = method
       payload[:request_uri] = "#{site.scheme}://#{site.host}:#{site.port}#{path}"
-      payload[:result]      = http.send(method, path, *arguments)
       Net::HTTP.start(site.host, site.port, use_ssl: defined? @ssl_options) do |http|
         configure_http(http)
         request = Net::HTTP::const_get(method.capitalize).new path
