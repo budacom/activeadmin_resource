@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.add_dependency "authograph"
   s.add_dependency 'enumerize', '~> 2.2'
   s.add_dependency 'money-rails', '~> 1.5'
-  s.add_dependency 'monetize', '~> 1.3.0'
+  s.add_dependency 'monetize', '~> 1.9.0'
   s.add_dependency 'money', '~> 6.6'
   s.add_dependency 'formtastic'
   s.add_development_dependency 'pry'
