@@ -33,7 +33,8 @@ module ActiveAdminResource
     def per(_limit_value)
       @limit_value = _limit_value
 
-      resources = @resource_class.find(:all, params: { search: @q.try(:permit!).to_h })
+      options = @q.present? ? { params: { search: @q.try(:permit!).to_h } } : {}
+      resources = @resource_class.find(:all, options)
 
       pagination_info = @resource_class.format.pagination_info
       offset = (pagination_info['current_page'] - 1) * _limit_value
