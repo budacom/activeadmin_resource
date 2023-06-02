@@ -1,6 +1,7 @@
+require 'active_admin_resource/query_result'
 require 'active_admin_resource/resource'
 require 'active_admin_resource/resource_column'
 require 'active_admin_resource/resource_class_adapter'
-require 'active_admin_resource/resource_chain_adapter'
+require 'active_admin_resource/resource_chain_helper'
 require 'active_admin_resource/active_admin/namespace_patch'
 require 'active_admin_resource/railtie'
