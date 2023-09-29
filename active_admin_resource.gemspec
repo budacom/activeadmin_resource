@@ -19,5 +19,9 @@ Gem::Specification.new do |s|
   s.add_dependency 'money', '~> 6.6'
   s.add_dependency 'formtastic'
   s.add_development_dependency 'pry'
+
+  s.add_development_dependency 'rails', '~> 6.1.7.4'
+  s.add_development_dependency 'rake'
   s.add_development_dependency 'rspec'
+  s.add_development_dependency 'rspec-rails'
 end

@@ -2,6 +2,7 @@ module ActiveAdminResource
   class ResourceChainHelper
     def initialize(_resource_class_adapter)
       @resource_class_adapter = _resource_class_adapter
+      @scope_args = [] # we need this variable, activeadmin accesses it directly :painharold:
     end
 
     def object
@@ -9,7 +10,7 @@ module ActiveAdminResource
     end
 
     def reorder(_query)
-      @reorder = _query.parameterize(separator: '_')
+      @reorder = _query.split('.').last.parameterize(separator: '_')
       self
     end
 

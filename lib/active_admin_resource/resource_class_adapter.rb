@@ -29,7 +29,7 @@ module ActiveAdminResource
     end
 
     def quoted_table_name
-      `resource_not_table`
+      'resource_not_table'
     end
 
     def column_names
